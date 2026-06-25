@@ -56,8 +56,12 @@ func _setup_audio() -> void:
 	var S = load("res://scripts/Systems/SfxPlayer.gd"); sfx_player = S.new(); sfx_player.name = "SFX"; add_child(sfx_player)
 
 func _setup_hud() -> void:
-	var scene = load("res://scripts/UI/Hud.tscn"); hud = scene.instantiate(); hud.name = "HUD"
-	add_child(hud); hud.init(resource_system, building_manager, unit_manager)
+	var HudScript = load("res://scripts/UI/Hud.gd")
+	hud = HudScript.new()
+	hud.name = "HUD"
+	hud.init(resource_system, building_manager, unit_manager)  # 必须在 add_child 之前！
+	add_child(hud)
+	print("[GameWorld] HUD 已加载")
 
 func _setup_minimap() -> void:
 	var S = load("res://scripts/UI/Minimap.gd"); minimap = S.new(); minimap.name = "Minimap"

@@ -63,6 +63,20 @@ func init(_rs, _bm, _um):
 
 
 func _ready():
+	# DEBUG: 醒目测试块 — 如果HUD加载，屏幕左上角会有大红块
+	var test = ColorRect.new()
+	test.name = "HUD_LOADED_TEST"
+	test.color = Color(1, 0, 0, 0.8)
+	test.position = Vector2(0, 0)
+	test.size = Vector2(100, 40)
+	add_child(test)
+	var tl = Label.new()
+	tl.text = "HUD OK"
+	tl.position = Vector2(10, 10)
+	tl.add_theme_color_override("font_color", Color.WHITE)
+	tl.add_theme_font_size_override("font_size", 16)
+	test.add_child(tl)
+	
 	_build_top()
 	_build_sidebar()
 	_build_info_panel()
