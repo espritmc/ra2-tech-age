@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="16" fill="url(#bg)"/>
+  <text x="64" y="70" text-anchor="middle" font-size="38" font-family="Arial Black,sans-serif" fill="#e94560" font-weight="900">RA</text>
+  <text x="64" y="100" text-anchor="middle" font-size="16" font-family="Arial,sans-serif" fill="#0f3460">科技</text>
+</svg>

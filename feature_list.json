@@ -1,0 +1,90 @@
+{
+  "project": "ra2-tech-age",
+  "version": "0.1.0",
+  "features": [
+    {
+      "id": "feat-001",
+      "name": "项目骨架与引擎集成",
+      "status": "in_progress",
+      "priority": "P0",
+      "description": "创建 Godot 项目、主场景、基本目录结构、harness 文件"
+    },
+    {
+      "id": "feat-002",
+      "name": "地图系统",
+      "status": "pending",
+      "priority": "P0",
+      "description": "Tilemap 地形渲染、地图生成、相机控制（缩放/平移）"
+    },
+    {
+      "id": "feat-003",
+      "name": "基础单位系统",
+      "status": "pending",
+      "priority": "P0",
+      "description": "Unit 基类、步兵单位、移动、选中、框选"
+    },
+    {
+      "id": "feat-004",
+      "name": "建筑系统",
+      "status": "pending",
+      "priority": "P0",
+      "description": "Building 基类、建造场/兵营/战车工厂/矿场、建造逻辑"
+    },
+    {
+      "id": "feat-005",
+      "name": "资源与经济系统",
+      "status": "pending",
+      "priority": "P0",
+      "description": "资金、电力、采矿、生产消耗"
+    },
+    {
+      "id": "feat-006",
+      "name": "战斗系统",
+      "status": "pending",
+      "priority": "P1",
+      "description": "攻击、伤害计算、护甲类型、血量、死亡"
+    },
+    {
+      "id": "feat-007",
+      "name": "科技树",
+      "status": "pending",
+      "priority": "P1",
+      "description": "科技时代特色：中国阵营、进阶科技、超级武器"
+    },
+    {
+      "id": "feat-008",
+      "name": "AI 对手",
+      "status": "pending",
+      "priority": "P1",
+      "description": "基础 AI：建造、生产、进攻"
+    },
+    {
+      "id": "feat-009",
+      "name": "局域网联机",
+      "status": "pending",
+      "priority": "P1",
+      "description": "ENet 网络、房间创建/加入、状态同步"
+    },
+    {
+      "id": "feat-010",
+      "name": "UI 界面",
+      "status": "pending",
+      "priority": "P2",
+      "description": "主菜单、HUD、小地图、建造菜单、游戏设置"
+    },
+    {
+      "id": "feat-011",
+      "name": "音效与画面特效",
+      "status": "pending",
+      "priority": "P2",
+      "description": "爆炸特效、武器特效、BGM、音效"
+    },
+    {
+      "id": "feat-012",
+      "name": "打包发布 Mac + Win",
+      "status": "pending",
+      "priority": "P2",
+      "description": "Godot 导出模板、macOS .app 打包、Windows .exe 打包"
+    }
+  ]
+}

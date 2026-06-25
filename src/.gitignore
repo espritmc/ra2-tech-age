@@ -1,0 +1,20 @@
+# Godot
+.godot/
+*.import
+*.translation
+export/
+export_presets.cfg
+.import/
+
+# Mono
+.mono/
+
+# System
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/
