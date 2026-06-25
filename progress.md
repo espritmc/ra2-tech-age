@@ -2,38 +2,38 @@
 
 ## 当前状态 (2026-06-25)
 
-**活跃功能**: feat-001 ✅ → feat-002  
-**状态**: feat-001 完成，准备 feat-002
+**活跃功能**: 可视化层完成  
+**状态**: 🟢 可玩 MVP
 
-### 已完成
-- [x] 项目目录创建
-- [x] AGENTS.md / feature_list.json / progress.md / init.sh
-- [x] docs/game-design.md 完整游戏设计文档
-- [x] Godot 4.4 引擎安装
-- [x] Godot 项目初始化 (project.godot + icon.svg)
-- [x] Main 主场景 (入口 + 状态管理)
-- [x] GameWorld 游戏世界 (核心枢纽)
-- [x] MapSystem 地图系统 (128×128 tile，程序化地形)
-- [x] ResourceSystem 资源系统 (资金 + 电力)
-- [x] CombatSystem 战斗系统 (伤害倍率表)
-- [x] Unit 基类 + Infantry + Vehicle 单位
-- [x] Building 基类 + BuildingManager (建造/放置)
-- [x] UnitManager 单位管理 (选中/框选/命令)
-- [x] AIController AI 对手 (定时生产/进攻)
-- [x] NetworkManager 网络系统 (ENet 房间)
-- [x] HUD 界面 (资金/电力/建造菜单/选中信息)
-- [x] Godot 无头验证通过 ✅
+### 已完成功能
+- [x] 地图系统 — 128×128 tile 程序化地形，_draw 可见区域裁剪
+- [x] 资源系统 — $10000 资金 + 电力 + 信号通知
+- [x] 战斗系统 — 5 伤害类型 × 5 护甲倍率表
+- [x] 单位可视化 — 步兵圆形 + 坦克炮塔形状 + 阵营颜色 + 血条
+- [x] 建筑可视化 — 矩形色块 + 类型标记 + 放置预览
+- [x] 玩家初始部队 — 3 灰熊坦克 + 5 GI 大兵 + 建造场/发电厂/兵营
+- [x] 交互系统 — 左键单击/框选、右键移动、散开队形
+- [x] AI 对手 — soviet 阵营，定时生产动员兵/犀牛坦克，定时进攻
+- [x] 自动交战 — 单位自动索敌攻击
+- [x] 战斗特效 — 子弹轨迹线 + 死亡爆炸粒子
+- [x] 小地图 — 右下角实时地形/单位/视口
+- [x] 死亡动画 — 缩小消失 + 爆炸
+- [x] 相机 — WASD 移动、Q/E 缩放、地图边界约束
+- [x] 导出配置 — macOS .app + Windows .exe
+- [x] 构建脚本 build.sh
+
+### 操作说明
+| 操作 | 按键 |
+|------|------|
+| 移动视角 | WASD |
+| 缩放 | Q / E |
+| 选中单位 | 左键单击 或 框选 |
+| 移动单位 | 右键点击目标 |
+| 建造建筑 | 右侧面板按钮 → 左键放置 → 右键取消 |
+| 停止 | S |
 
 ### 验证结果
 ```
 godot --path src/ --headless --quit
-→ [Main] 启动 → [MapSystem] 128×128 tiles
-→ [ResourceSystem] $10000 → [AIController] soviet
-→ [GameWorld] ✅ 所有系统就绪！
-→ 零错误，零警告
+→ 零错误，零警告，所有系统启动正常
 ```
-
-### 下一步
-- feat-002: 地图系统完善（相机边界、小地图）
-- feat-003: 单位可视化（精灵占位符）
-- feat-004: 建筑可视化 + 实际建造流程

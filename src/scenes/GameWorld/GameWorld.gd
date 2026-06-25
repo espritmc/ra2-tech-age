@@ -2,131 +2,153 @@ extends Node2D
 class_name GameWorld
 
 ## RA2 科技时代 — 游戏世界核心枢纽
-##
-## 启动时按顺序初始化所有子系统：
-##   MapSystem → ResourceSystem → BuildingManager → UnitManager → AIController → HUD
-##
-## 使用 preload 加载脚本，var 动态类型避免 Godot 解析期类型检查问题。
 
-# === 子系统（延迟类型声明） ===
-var map_system
-var resource_system
-var unit_manager
-var building_manager
-var combat_system
-var ai_controller
-var hud
+var map_system; var resource_system; var unit_manager; var building_manager
+var combat_system; var ai_controller; var hud; var minimap
+var explosion_fx; var combat_visuals
 
-# === 相机 ===
 var camera: Camera2D
 var camera_speed: float = 800.0
-var zoom_min: float = 0.3
-var zoom_max: float = 2.0
-var zoom_step: float = 0.1
+var zoom_min: float = 0.3; var zoom_max: float = 2.0; var zoom_step: float = 0.1
 
 
 func _ready() -> void:
-	print("[GameWorld] ═══ RA2 科技时代 — 游戏世界初始化 ═══")
+	add_to_group("game_world")
+	print("[GameWorld] ═══ RA2 科技时代 — 初始化 ═══")
 	_setup_camera()
 	_setup_map()
 	_setup_resources()
 	_setup_combat()
+	_setup_fx()
 	_setup_buildings()
 	_setup_units()
 	_setup_ai()
 	_setup_hud()
-	print("[GameWorld] ✅ 所有系统就绪！")
+	_setup_minimap()
+	_spawn_player_start()
+	print("[GameWorld] ✅ 就绪！")
 
 
 func _setup_camera() -> void:
-	camera = Camera2D.new()
-	camera.position = Vector2(4096, 4096)
-	camera.zoom = Vector2(0.8, 0.8)
-	add_child(camera)
-	camera.make_current()
+	camera = Camera2D.new(); camera.position = Vector2(2500, 4096); camera.zoom = Vector2(0.6, 0.6)
+	add_child(camera); camera.make_current()
 
 
 func _setup_map() -> void:
-	var MapSys = load("res://scripts/Map/MapSystem.gd")
-	map_system = MapSys.new()
-	map_system.name = "MapSystem"
-	add_child(map_system)
+	var S = load("res://scripts/Map/MapSystem.gd"); map_system = S.new(); map_system.name = "MapSystem"; add_child(map_system)
 
 
 func _setup_resources() -> void:
-	var ResSys = load("res://scripts/Systems/ResourceSystem.gd")
-	resource_system = ResSys.new()
-	resource_system.name = "ResourceSystem"
-	add_child(resource_system)
-	resource_system.credits = 10000
+	var S = load("res://scripts/Systems/ResourceSystem.gd"); resource_system = S.new(); resource_system.name = "ResourceSystem"
+	resource_system.credits = 10000; add_child(resource_system)
 
 
 func _setup_combat() -> void:
-	var CombatSys = load("res://scripts/Systems/CombatSystem.gd")
-	combat_system = CombatSys.new()
-	combat_system.name = "CombatSystem"
-	add_child(combat_system)
+	var S = load("res://scripts/Systems/CombatSystem.gd"); combat_system = S.new(); combat_system.name = "CombatSystem"; add_child(combat_system)
+
+
+func _setup_fx() -> void:
+	var E = load("res://scripts/Systems/ExplosionEffect.gd"); explosion_fx = E.new(); explosion_fx.name = "ExplosionFX"; add_child(explosion_fx)
+	var C = load("res://scripts/Systems/CombatVisuals.gd"); combat_visuals = C.new(); combat_visuals.name = "CombatVisuals"; add_child(combat_visuals)
 
 
 func _setup_buildings() -> void:
-	var BldMgr = load("res://scripts/Buildings/BuildingManager.gd")
-	building_manager = BldMgr.new()
-	building_manager.name = "BuildingManager"
-	add_child(building_manager)
-	building_manager.init(map_system)
+	var S = load("res://scripts/Buildings/BuildingManager.gd"); building_manager = S.new(); building_manager.name = "BuildingManager"
+	add_child(building_manager); building_manager.init(map_system)
 
 
 func _setup_units() -> void:
-	var UnitMgr = load("res://scripts/Units/UnitManager.gd")
-	unit_manager = UnitMgr.new()
-	unit_manager.name = "UnitManager"
+	var S = load("res://scripts/Units/UnitManager.gd"); unit_manager = S.new(); unit_manager.name = "UnitManager"
 	add_child(unit_manager)
 
 
 func _setup_ai() -> void:
-	var AICtrl = load("res://scripts/AI/AIController.gd")
-	ai_controller = AICtrl.new()
-	ai_controller.name = "AIController"
-	ai_controller.faction = "soviet"
-	ai_controller.base_position = Vector2(9000, 5500)
-	add_child(ai_controller)
-	ai_controller.init(resource_system, building_manager, unit_manager, map_system)
+	var S = load("res://scripts/AI/AIController.gd"); ai_controller = S.new(); ai_controller.name = "AIController"
+	ai_controller.faction = "soviet"; ai_controller.base_position = Vector2(5800, 5500)
+	add_child(ai_controller); ai_controller.init(resource_system, building_manager, unit_manager, map_system)
 
 
 func _setup_hud() -> void:
-	var hud_scene = load("res://scripts/UI/Hud.tscn")
-	hud = hud_scene.instantiate()
-	hud.name = "HUD"
-	add_child(hud)
-	hud.init(resource_system, building_manager, unit_manager)
+	var scene = load("res://scripts/UI/Hud.tscn"); hud = scene.instantiate(); hud.name = "HUD"
+	add_child(hud); hud.init(resource_system, building_manager, unit_manager)
+
+
+func _setup_minimap() -> void:
+	var S = load("res://scripts/UI/Minimap.gd"); minimap = S.new(); minimap.name = "Minimap"
+	add_child(minimap); minimap.init(map_system, unit_manager, building_manager)
+
+
+func _spawn_player_start() -> void:
+	var Inf = load("res://scripts/Units/Infantry.gd"); var Veh = load("res://scripts/Units/Vehicle.gd")
+	var Bld = load("res://scripts/Buildings/Building.gd"); var bx = 2500.0; var by = 5000.0
+	
+	# 建筑
+	var buildings_data = [
+		{"name":"建造场","type":Bld.BuildingType.CONSTRUCTION_YARD,"hp":2000,"pow":50,"sz":Vector2i(3,3),"off":Vector2(0,0)},
+		{"name":"发电厂","type":Bld.BuildingType.POWER_PLANT,"hp":750,"pow":100,"sz":Vector2i(2,2),"off":Vector2(-200,0)},
+		{"name":"兵营","type":Bld.BuildingType.BARRACKS,"hp":800,"pow":-20,"sz":Vector2i(2,2),"off":Vector2(200,0)},
+	]
+	for d in buildings_data:
+		var b = Bld.new(); b.building_name = d["name"]; b.building_type = d["type"]; b.faction = "allied"
+		b.max_health = d["hp"]; b.current_health = d["hp"]; b.build_size = d["sz"]; b.is_placed = true
+		if d["pow"] > 0: b.power_provided = d["pow"]
+		else: b.power_consumed = -d["pow"]
+		b.global_position = Vector2(bx + d["off"].x, by + d["off"].y)
+		add_child(b); building_manager.all_buildings.append(b)
+	
+	# 坦克 x3
+	for i in range(3):
+		var t = Veh.new(); t.setup_as_grizzly(); t.global_position = Vector2(bx + 100 + i*80, by - 150); add_child(t); unit_manager.register_unit(t)
+	
+	# 步兵 x5
+	for i in range(5):
+		var g = Inf.new(); g.setup_as_gi(); g.global_position = Vector2(bx - 100 + i*50, by - 100); add_child(g); unit_manager.register_unit(g)
+	
+	print("[GameWorld] 玩家初始部队已部署: 3 灰熊坦克 + 5 GI 大兵 + 3 建筑")
 
 
 func _process(delta: float) -> void:
-	_handle_camera_movement(delta)
-	_update_camera_bounds()
+	_handle_camera_movement(delta); _update_camera_bounds()
+	_check_combat_visuals(); _check_death_explosions()
+
+var _last_unit_count: int = 0
+
+func _check_death_explosions() -> void:
+	var current = 0
+	for u in unit_manager.all_units:
+		if u.is_alive: current += 1
+	if current < _last_unit_count:
+		# 有单位死亡 — 简单闪烁
+		pass
+	_last_unit_count = current
 
 
 func _handle_camera_movement(delta: float) -> void:
-	var input_dir = Vector2(
-		Input.get_axis("move_left", "move_right"),
-		Input.get_axis("move_up", "move_down")
-	)
-	
-	if input_dir != Vector2.ZERO:
-		camera.position += input_dir.normalized() * camera_speed * delta / camera.zoom
-	
-	if Input.is_action_just_pressed("camera_zoom_in"):
-		camera.zoom = (camera.zoom - Vector2(zoom_step, zoom_step)).clamp(
-			Vector2(zoom_min, zoom_min), Vector2(zoom_max, zoom_max))
-	if Input.is_action_just_pressed("camera_zoom_out"):
-		camera.zoom = (camera.zoom + Vector2(zoom_step, zoom_step)).clamp(
-			Vector2(zoom_min, zoom_min), Vector2(zoom_max, zoom_max))
+	var dir = Vector2(Input.get_axis("move_left","move_right"), Input.get_axis("move_up","move_down"))
+	if dir != Vector2.ZERO: camera.position += dir.normalized() * camera_speed * delta / camera.zoom
+	if Input.is_action_just_pressed("camera_zoom_in"): camera.zoom = (camera.zoom - Vector2(zoom_step,zoom_step)).clamp(Vector2(zoom_min,zoom_min), Vector2(zoom_max,zoom_max))
+	if Input.is_action_just_pressed("camera_zoom_out"): camera.zoom = (camera.zoom + Vector2(zoom_step,zoom_step)).clamp(Vector2(zoom_min,zoom_min), Vector2(zoom_max,zoom_max))
 
 
 func _update_camera_bounds() -> void:
-	var map_bounds = map_system.get_map_bounds()
-	var view_size = get_viewport().get_visible_rect().size / camera.zoom
-	var half_view = view_size / 2
-	
-	camera.position.x = clamp(camera.position.x, map_bounds.position.x + half_view.x, map_bounds.end.x - half_view.x)
-	camera.position.y = clamp(camera.position.y, map_bounds.position.y + half_view.y, map_bounds.end.y - half_view.y)
+	var mb = map_system.get_map_bounds(); var vs = get_viewport().get_visible_rect().size / camera.zoom; var hv = vs/2
+	camera.position.x = clamp(camera.position.x, mb.position.x+hv.x, mb.end.x-hv.x)
+	camera.position.y = clamp(camera.position.y, mb.position.y+hv.y, mb.end.y-hv.y)
+
+
+func _check_combat_visuals() -> void:
+	# 检测单位攻击事件 — 简单轮询
+	if Engine.get_process_frames() % 10 != 0: return
+	for u in unit_manager.all_units:
+		if not u.is_alive or not u.attack_target: continue
+		var t = u.attack_target
+		if not is_instance_valid(t) or not t.is_alive: continue
+		var dist = u.global_position.distance_to(t.global_position)
+		if dist <= u.attack_range + 30:
+			var faction_color = {"allied": Color(0.3,0.6,1), "soviet": Color(1,0.3,0.2), "china": Color(1,0.7,0.1)}.get(u.faction, Color.WHITE)
+			combat_visuals.add_shot(u.global_position, t.global_position, faction_color)
+
+
+func spawn_explosion(pos: Vector2, size: float = 1.0) -> void:
+	if explosion_fx:
+		explosion_fx.spawn_explosion(pos, size)
